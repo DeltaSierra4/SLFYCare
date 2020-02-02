@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <title>Login V10</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+  <link rel="icon" type="image/png" href="/static/images/icons/favicon.ico">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="Î/static/vendor/animate/animate.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/css/util1.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/result.css">
+<!--===============================================================================================-->
+<style type="text/css">
+  #parent_div_1, #parent_div_2, #parent_div_3{
+    width:100px;
+    height:100px;
+    border:1px solid red;
+    margin-right:10px;
+    float:left;
+}
+.child_div_1{
+    float:left;
+    margin-right:5px;
+}
+</style>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      window.onload = function() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", 'http://localhost:8000/getresults', false ); // false for synchronous request
+    xmlHttp.send( null );
+    data = JSON.parse(xmlHttp.responseText);
+
+    console.log(data)
+    emotive_score = data[4]['emotive_score']
+    sleephrs = data[3]['sleephrs']
+    no_days = sleephrs.length;
+    data_array = [['Days', 'Wellbeing', 'Sleep']]
+    Happy = 0
+    Sad = 0
+    Fearful = 0
+    Suprised = 0
+    Disgust = 0
+    Neutral = 0
+    Anger = 0
+    piechart_data = data[1]['emotions']
+    document.getElementById("G6").value='\t\t\tFrequently used keywords:\n'+data[0]['keywords']
+    for (i=0;i<no_days;i++){
+      data_array.push([i+1,parseFloat(emotive_score[i]),parseFloat(sleephrs[i])]);
+      if (piechart_data[i]=='Happy'){
+        Happy++;
+      }
+      if (piechart_data[i]=='Sad'){
+        Sad++;
+      }
+      if (piechart_data[i]=='Fearful'){
+        Fearful++;
+      }
+      if (piechart_data[i]=='Suprised'){
+        Suprised++;
+      }
+      if (piechart_data[i]=='Disgust'){
+        Disgust++;
+      }
+      if (piechart_data[i]=='Neutral'){
+        Neutral++;
+      }
+      if (piechart_data[i]=='Anger'){
+        Anger++;
+      }
+
+
+    }
+
+
+};
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable(
+          data_array
+        );
+
+        var options = {
+          title: 'YourSLF Tracked',
+          curveType: 'function',
+          legend: { position: 'bottom' },
+          backgroundColor: 'transparent',
+          colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawPieChart);
+
+      function drawPieChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Happy',     (Happy/7)*100],
+          ['Sad',      (Sad/7)*100],
+          ['Fearful',  (Fearful/7)*100],
+          ['Suprised', (Suprised/7)*100],
+          ['Disgust',    (Disgust/7)*100],
+          ['Neutral',    (Neutral/7)*100],
+          ['Anger',    (Anger/7)*100]
+
+        ]);
+
+        var options = {
+          title: 'Moods this week',
+          backgroundColor: 'transparent',
+          colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6','#f6c7b6'],
+          is3D: true
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+</head>
+<body data-gr-c-s-loaded="true">
+  <div>
+        <img src="/static/images/logo_white.png" width="265" height="79" style="padding-top: 40px;padding-left: 65px">
+        <a href="http://localhost:5000/journal"><img src="/static/images/profile.png" width="210" height="580" align="right" style="padding-top: 40px;padding-right: 100px"></a>
+
+
+      </div>
+      <div>
+      <div id="curve_chart" style="width:100px;
+    height:500px;
+    width:700px;
+    margin-left:25px;
+    margin-top: 50px;
+    float:left;"></div>
+          <div id="piechart" style="width:100px;
+    height:500px;
+    width:500px;
+    margin-left:0px;
+    margin-top: 50px;
+    float:left;
+    ">
+
+    </div>
+    <textarea type="text" id="G6" value="" rows="4" cols="50" readonly style=";
+    outline: none;
+    border: none;
+    color: #e6693e;
+    background-color: #f0f8ff00;
+    font-style: inherit;
+    font-family: sans-serif;
+    text-align: left;
+    margin-left: 700px;"/>
+  </div>
+
+
+      </body>
+
+  <div id="dropDownSelect1"></div>
+
+<!--===============================================================================================-->
+  <script src="/static/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+  <script src="/static/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+  <script src="/static/vendor/bootstrap/js/popper.js"></script>
+  <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+  <script src="/static/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+  <script src="/static/vendor/daterangepicker/moment.min.js"></script>
+  <script src="/static/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+  <script src="/static/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+  <script src="/static/js/main.js"></script>
+
+
+</body><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <title>Login V10</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+  <link rel="icon" type="image/png" href="/static/images/icons/favicon.ico">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="Î/static/vendor/animate/animate.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="/static/css/util1.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/journal.css">
+<!--===============================================================================================-->
+</head>
+<body data-gr-c-s-loaded="true">
+  <div>
+        <img src="/static/images/logo_white.png" width="265" height="79" style="padding-top: 40px;padding-left: 65px">
+        <a href="http://localhost:5000/result"><img src="/static/images/profile.png" width="210" height="580" align="right" style="padding-top: 40px;padding-right: 100px"></a>
+      </div>
+
+
+      <span class="jornal100-form-title p-b-51">
+            Welcome Catherine!
+          </span>
+
+        <div class="wrap-login100 p-t-50 p-b-90">
+        <form class="login100-form validate-form flex-sb flex-w">
+
+
+          <div class="wrap-journal100 validate-input m-b-16">
+            <input id = "entry" class="input100" type="text" placeholder="Tell us about how you feel :)">
+            <span class="focus-input100"></span>
+          </div>
+
+
+
+<div id="my_camera" style="height: 300px; width: 500px; margin-left: 525px; margin-top: -312px; float: left;"><div></div><video autoplay="autoplay" playsinline="playsinline" style="width: 500px; height: 300px;"></video></div>
+    <div>
+            <button class="login100-form-btn" type='button' onClick="take_snapshot()">
+              Track My Slfy
+            </button>
+          </div>
+        </form>
+        <script type="text/javascript" src="/static/js/webcam.min.js"></script>
+
+    <!-- Configure a few settings and attach camera -->
+    <script language="JavaScript">
+        Webcam.set({
+            width: 500,
+            height: 300,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+        });
+        Webcam.attach( '#my_camera' );
+    </script>
+      </div>
+
+
+  <div id="dropDownSelect1"></div>
+
+<!--===============================================================================================-->
+  <script src="/static/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+  <script src="/static/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+  <script src="/static/vendor/bootstrap/js/popper.js"></script>
+  <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+  <script src="/static/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+  <script src="/static/vendor/daterangepicker/moment.min.js"></script>
+  <script src="/static/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+  <script src="/static/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+  <script src="/static/js/main.js"></script>
+<!-- Code to handle taking the snapshot and displaying it locally -->
+    <script language="JavaScript">
+        function take_snapshot() {
+          var nameValue = document.getElementById("entry").value;
+          var data = {
+              "journal"  :  nameValue
+
+            }
+            Webcam.snap(function(data_uri) {
+                // display results in page
+                data['image'] = data_uri.slice(23);
+                // console.log(data_uri.slice(23))
+                var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+                var theUrl = "http://localhost:8000/api/";
+                xmlhttp.open("POST", theUrl);
+                xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xmlhttp.send(JSON.stringify(data));
+                //window.location = "http://localhost:5000/result"
+            });
+
+            console.log(data);
+        }
+
+    </script>
+
+<span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></body></html>
